@@ -16,8 +16,7 @@ public class DatabaseServer {
 
 	private Connection connection = null;
 	private User user;
-	private Book book;
-	private Flashcard flashcard;
+
 
 
 	public DatabaseServer() {
@@ -39,8 +38,6 @@ public class DatabaseServer {
 		}
 
 		user = new User(connection);
-		book = new Book(connection);
-		flashcard = new Flashcard(connection);
 
 	}
 

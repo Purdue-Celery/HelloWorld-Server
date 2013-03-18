@@ -1,12 +1,16 @@
 package com.team13purdue.helloworld;
 
+import com.team13purdue.helloworld.server.Server;
+
+
 public class MainEntry {
 
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+
+		Server myServer = new Server();
 
 	}
 

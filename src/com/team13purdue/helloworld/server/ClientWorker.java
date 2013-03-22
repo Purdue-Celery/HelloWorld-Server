@@ -79,6 +79,13 @@ class ClientWorker implements Runnable {
 				else
 					out.println("@login invalid");
 			}
+		} else if (str.startsWith("@addfeed")) {
+			String[] addfeed = str.split(" ");
+
+			if (addfeed.length == 2) {
+				String feedid = addfeed[1];
+				out.println("@addfeed "+feedid);
+			}
 		} else if (str.equals("BYE")) {
 			out.println("closed");
 		} else {

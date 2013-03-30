@@ -42,8 +42,8 @@ class ClientWorker implements Runnable {
 					// out.println("Echo:" + line);
 					System.out.println(line);
 					processString(line);
-					out.println("@end");
-					if (line.trim().equals("BYE"))
+					//out.println("@end");
+					if (line.trim().equals("@done"))
 						done = true;
 				}
 			} finally {
@@ -65,7 +65,7 @@ class ClientWorker implements Runnable {
 				String username = register[1];
 				String password = register[2];
 				myDBServer.insertUser(username, password);
-				out.println("@register success");
+				out.println("success");
 			}
 		} else if (str.startsWith("@login")) {
 			String[] login = str.split(" ");
@@ -75,9 +75,9 @@ class ClientWorker implements Runnable {
 				String password = login[2];
 				if (myDBServer.getPassword(username) != null
 						&& myDBServer.getPassword(username).equals(password))
-					out.println("@login valid");
+					out.println("success");
 				else
-					out.println("@login invalid");
+					out.println("fail");
 			}
 		} else if (str.startsWith("@addfeed")) {
 			String[] addfeed = str.split(" ");
@@ -86,7 +86,7 @@ class ClientWorker implements Runnable {
 				String feedid = addfeed[1];
 				out.println("@addfeed "+feedid);
 			}
-		} else if (str.equals("BYE")) {
+		} else if (str.equals("@done")) {
 			out.println("closed");
 		} else {
 			out.println("@error request not recognized");

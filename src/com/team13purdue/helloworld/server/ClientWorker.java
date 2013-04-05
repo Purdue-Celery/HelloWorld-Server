@@ -43,7 +43,7 @@ class ClientWorker implements Runnable {
 					// out.println("Echo:" + line);
 					System.out.println(line);
 					processString(line);
-					//out.println("@end");
+					// out.println("@end");
 					if (line.trim().equals("@done"))
 						done = true;
 				}
@@ -56,7 +56,6 @@ class ClientWorker implements Runnable {
 		}
 
 	}
-
 
 	public void processString(String str) {
 		if (str.startsWith("@register")) {
@@ -74,19 +73,20 @@ class ClientWorker implements Runnable {
 			if (login.length == 3) {
 				String username = login[1];
 				String password = login[2];
-				if (myDBServer.getPassword(username) != null
-						&& myDBServer.getPassword(username).equals(password))
+				if (myDBServer.verifyLogin(username, password))
 					out.println("success");
 				else
 					out.println("fail");
 			}
 		} else if (str.startsWith("@addfeed")) {
-			
-//			myDBServer.addFeed("aaa", "heng", Date.valueOf("2013-04-02"), 0,0,0,0);
+			out.println("addfeed request receieved");
+			// myDBServer.addFeed("aaa", "heng", Date.valueOf("2013-04-02"),
+			// 0,0,0,0);
 		} else if (str.startsWith("@getfeed")) {
-
+			out.println("getfeed request receieved");
 		} else if (str.startsWith("@addreply")) {
-//			myDBServer.addReply(1, "aaa", Date.valueOf("2013-04-02"));
+			out.println("addreply request receieved");
+			// myDBServer.addReply(1, "aaa", Date.valueOf("2013-04-02"));
 		} else if (str.equals("@done")) {
 			out.println("closed");
 		} else {

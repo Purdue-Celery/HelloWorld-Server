@@ -56,14 +56,16 @@ public class DatabaseServer {
 		try {
 			Statement st = connection.createStatement();
 			st.executeUpdate(query);
+			return true;
 		} catch (SQLException e) {
 			System.out.println("InsertUser has gone wrong");
+			return false;
 		}
 		// System.out.println(query);
-		return true;
+
 	}
 
-	public String getPassword(String username) {
+	public boolean verifyLogin(String username, String password) {
 		String query = "SELECT password FROM chen869.user WHERE username='"
 				+ username + "'";
 		// System.out.println(query);
@@ -71,14 +73,25 @@ public class DatabaseServer {
 		try {
 			Statement st = connection.createStatement();
 			ResultSet rs = st.executeQuery(query);
-			while (rs.next()) {
-				pw = rs.getString("password");
+			if (rs == null) {
+				System.out.println("rs is null");
+				return false;
+			} else {
+				while (rs.next()) {
+					pw = rs.getString("password");
+				}
+				if (pw == null) {
+					return false;
+				} else if (pw.equals(password)) {
+					return true;
+				} else
+					return false;
 			}
+
 		} catch (SQLException e) {
-			System.out.println("getPW has gone wrong");
-			return null;
+			System.out.println("Something is wrong");
+			return false;
 		}
-		return pw;
 	}
 
 	public void addFeed(String username, String content, Date date,
@@ -112,10 +125,7 @@ public class DatabaseServer {
 
 	public void addReply(int feed_id, String username, Date date) {
 		String query = "INSERT INTO chen869.reply (feed_id, username, date) VALUES ("
-				+ feed_id+", '"+username
-				+ "', '"
-				+ date
-				+ "' )";
+				+ feed_id + ", '" + username + "', '" + date + "' )";
 		System.out.println(query);
 		try {
 			Statement st = connection.createStatement();
@@ -126,19 +136,18 @@ public class DatabaseServer {
 			e.printStackTrace();
 		}
 	}
-	
-	public String getFeed(int feedID){
+
+	public String getFeed(int feedID) {
 		String query1 = "SELECT * FROM chen869.feed WHERE feed_id=";
-		String query = query1+feedID;
+		String query = query1 + feedID;
 		System.out.println(query);
-		try{
+		try {
 			Statement st = connection.createStatement();
 			ResultSet rs = st.executeQuery(query);
-			while(rs.next()){
+			while (rs.next()) {
 
 			}
-		}
-		catch(SQLException e){
+		} catch (SQLException e) {
 			System.out.println("getFeed has gone wrong");
 			return null;
 		}

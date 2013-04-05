@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
@@ -80,12 +81,12 @@ class ClientWorker implements Runnable {
 					out.println("fail");
 			}
 		} else if (str.startsWith("@addfeed")) {
-			String[] addfeed = str.split(" ");
+			
+//			myDBServer.addFeed("aaa", "heng", Date.valueOf("2013-04-02"), 0,0,0,0);
+		} else if (str.startsWith("@getfeed")) {
 
-			if (addfeed.length == 2) {
-				String feedid = addfeed[1];
-				out.println("@addfeed "+feedid);
-			}
+		} else if (str.startsWith("@addreply")) {
+//			myDBServer.addReply(1, "aaa", Date.valueOf("2013-04-02"));
 		} else if (str.equals("@done")) {
 			out.println("closed");
 		} else {

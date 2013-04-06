@@ -10,9 +10,9 @@ import java.sql.Statement;
 public class DatabaseServer {
 
 	// set up parameters:
-	private final String url = "jdbc:mysql://mydb.ics.purdue.edu:3306/chen869";
+	private static final String url = "jdbc:mysql://mydb.ics.purdue.edu:3306/chen869";
 	// private final String url = "jdbc:mysql://localhost:3306/test";
-	private final String host = "chen869";
+	private static final String host = "chen869";
 	private final String pw = "cs252";
 
 	private Connection connection = null;

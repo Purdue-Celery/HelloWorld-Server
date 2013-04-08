@@ -7,6 +7,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import com.team13purdue.helloworld.model.Feed;
+
 public class DatabaseServer {
 
 	// set up parameters:
@@ -145,7 +147,17 @@ public class DatabaseServer {
 			Statement st = connection.createStatement();
 			ResultSet rs = st.executeQuery(query);
 			while (rs.next()) {
-
+				int feed_id = rs.getInt("feed_id");
+				String username = rs.getString("username");
+				String content = rs.getString("content");
+				Date date = rs.getDate("date");
+				double latitude = rs.getDouble("latitude");
+				double longitude = rs.getDouble("longitude");
+				int likes = rs.getInt("likes");
+				int dislikes = rs.getInt("dislikes");
+				Feed feed = new Feed(feed_id, username, content, date,
+						latitude, longitude, likes, dislikes);
+				return feed.toString();
 			}
 		} catch (SQLException e) {
 			System.out.println("getFeed has gone wrong");

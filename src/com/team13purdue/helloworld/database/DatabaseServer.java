@@ -131,6 +131,46 @@ public class DatabaseServer {
 		}
 	}
 
+	public String getUpdatedFeedList(double target_latitude, double target_longitude) {
+		JSONArray array = new JSONArray();
+		// TODO need to change
+		String query = "SELECT * FROM chen869.feed";
+		try {
+			Statement st = connection.createStatement();
+			ResultSet rs = st.executeQuery(query);
+			while (rs.next()) {
+				int feed_id = rs.getInt("feed_id");
+				String username = rs.getString("username");
+				String content = rs.getString("content");
+				Date date = rs.getDate("date");
+				double latitude = rs.getDouble("latitude");
+				double longitude = rs.getDouble("longitude");
+				int likes = rs.getInt("likes");
+				int dislikes = rs.getInt("dislikes");
+				JSONObject obj = new JSONObject();
+				try {
+					obj.put("feedID", feed_id);
+					obj.put("username", username);
+					obj.put("content", content);
+					obj.put("date", date.toString());
+					obj.put("latitude", latitude);
+					obj.put("longitude", longitude);
+					obj.put("likes", likes);
+					obj.put("dislikes", dislikes);
+
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				array.put(obj);
+			}
+		} catch (SQLException e) {
+			System.out.println("Something is wrong");
+			return null;
+		}
+		return array.toString();
+	}
+
 	public int addFeed(String username, String content, Date date,
 			double latitude, double longitude, int likes, int dislikes) {
 		// addFeed("aaa", "heng", Date.valueOf("2013-04-02"), 0,0,0,0)

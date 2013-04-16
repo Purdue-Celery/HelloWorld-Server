@@ -6,6 +6,7 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.Scanner;
 
 import org.json.JSONException;
@@ -35,12 +36,9 @@ class ClientWorker implements Runnable {
 				in = new Scanner(inStream);
 				out = new PrintWriter(outStream, true);
 
-				// out.println("Hello!");
-
 				boolean done = false;
 				while (!done && in.hasNextLine()) {
 					line = in.nextLine();
-					// out.println("Echo:" + line);
 					System.out.println(line);
 					processString(line);
 					// out.println("@end");
@@ -79,12 +77,13 @@ class ClientWorker implements Runnable {
 					out.println("fail");
 			}
 		} else if (str.startsWith("@update_current_feeds")) {
-			out.println("");
-			// TODO
+			// TODO deal with filter object
+
+			String list = myDBServer.getUpdatedFeedList(0, 0);
+			out.println(list);
 
 		} else if (str.startsWith("@add_feed")) {
 			str = str.replaceFirst("@add_feed ", "");
-			// System.out.println("str: " + str);
 			JSONObject obj = null;
 			try {
 				obj = new JSONObject(str);
@@ -113,7 +112,6 @@ class ClientWorker implements Runnable {
 			out.println("getfeed request receieved");
 
 		} else if (str.startsWith("@add_reply")) {
-			// out.println("addreply request receieved");
 			str = str.replaceFirst("@add_reply ", "");
 			System.out.println("str: " + str);
 			JSONObject obj = null;
@@ -173,6 +171,7 @@ class ClientWorker implements Runnable {
 				out.println("@error request not recognized");
 
 		} else if (str.startsWith("@")) {
+
 			out.println("");
 
 		} else if (str.startsWith("@")) {

@@ -4,14 +4,13 @@ import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 
 import org.json.JSONArray;
-
-import com.team13purdue.helloworld.model.Feed;
-import com.team13purdue.helloworld.model.Reply;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class DatabaseServer {
 
@@ -56,6 +55,38 @@ public class DatabaseServer {
 		}
 	}
 
+	public void printResultTable(String queryString) {
+		String query = queryString;
+		try {
+			Statement st = connection.createStatement();
+			ResultSet rs = st.executeQuery(query);
+			ResultSetMetaData rsmd = rs.getMetaData();
+
+			int numberOfColumns = rsmd.getColumnCount();
+			for (int i = 1; i <= numberOfColumns; i++) {
+				if (i > 1)
+					System.out.print("\t");
+				String columnName = rsmd.getColumnName(i);
+				System.out.print(columnName);
+			}
+			System.out.println();
+
+			while (rs.next()) {
+				for (int i = 1; i <= numberOfColumns; i++) {
+					if (i > 1)
+						System.out.print("\t");
+					String columnValue = rs.getString(i);
+					System.out.print(columnValue);
+				}
+				System.out.println();
+			}
+			st.close();
+		} catch (SQLException e) {
+			System.out.println("Something is wrong");
+			e.printStackTrace();
+		}
+	}
+
 	public boolean insertUser(String username, String password) {
 		String query = "INSERT INTO chen869.user (username, password) VALUES ('"
 				+ username + "','" + pw + "')";
@@ -64,7 +95,7 @@ public class DatabaseServer {
 			st.executeUpdate(query);
 			return true;
 		} catch (SQLException e) {
-			System.out.println("InsertUser has gone wrong");
+			System.out.println("Something is wrong");
 			return false;
 		}
 		// System.out.println(query);
@@ -149,9 +180,17 @@ public class DatabaseServer {
 
 	}
 
-	public void addReply(int feed_id, String username, Date date) {
-		String query = "INSERT INTO chen869.reply (feed_id, username, date) VALUES ("
-				+ feed_id + ", '" + username + "', '" + date + "' )";
+	public boolean addReply(int feed_id, String username, String content,
+			Date date) {
+		String query = "INSERT INTO chen869.reply (feed_id, username, content, date) VALUES ("
+				+ feed_id
+				+ ", '"
+				+ username
+				+ "', '"
+				+ content
+				+ "','"
+				+ date
+				+ "' )";
 		System.out.println(query);
 		try {
 			Statement st = connection.createStatement();
@@ -160,7 +199,9 @@ public class DatabaseServer {
 		} catch (SQLException e) {
 			System.out.println("Something is wrong");
 			e.printStackTrace();
+			return false;
 		}
+		return true;
 	}
 
 	public String getFeed(int feed_id) {
@@ -178,12 +219,13 @@ public class DatabaseServer {
 				double longitude = rs.getDouble("longitude");
 				int likes = rs.getInt("likes");
 				int dislikes = rs.getInt("dislikes");
-				Feed feed = new Feed(feed_id, username, content, date,
-						latitude, longitude, likes, dislikes);
-				return feed.toString();
+				// Feed feed = new Feed(feed_id, username, content, date,
+				// latitude, longitude, likes, dislikes);
+				// return feed.toString();
+
 			}
 		} catch (SQLException e) {
-			System.out.println("getFeed has gone wrong");
+			System.out.println("Something is wrong");
 			return null;
 		}
 		return null;
@@ -192,17 +234,64 @@ public class DatabaseServer {
 	public String getReplyList(int feed_id) {
 		JSONArray array = new JSONArray();
 
-		String query = "SELECT * FROM chen869.reply WHERE feed_id = " + feed_id;
+		String query = "SELECT * FROM chen869.reply WHERE feed_id = " + feed_id
+				+ " ORDER BY date";
 		try {
 			Statement st = connection.createStatement();
 			ResultSet rs = st.executeQuery(query);
 			while (rs.next()) {
+				int reply_id = rs.getInt("reply_id");
+				String username = rs.getString("username");
+				String content = rs.getString("content");
+				Date date = rs.getDate("date");
+				JSONObject obj = new JSONObject();
+				try {
+					obj.put("ID", reply_id);
+					obj.put("feedID", feed_id);
+					obj.put("username", username);
+					obj.put("content", content);
+					obj.put("date", date.toString());
 
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				array.put(obj);
 			}
 		} catch (SQLException e) {
-			System.out.println("getFeed has gone wrong");
+			System.out.println("Something is wrong");
 			return null;
 		}
-		return null;
+		return array.toString();
+	}
+
+	public boolean incrementLike(int feed_id) {
+		String query = "UPDATE chen869.feed SET likes = likes + 1 WHERE feed_id = "
+				+ feed_id;
+		try {
+			Statement st = connection.createStatement();
+			st.executeUpdate(query);
+			st.close();
+		} catch (SQLException e) {
+			System.out.println("Something is wrong");
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+
+	public boolean incrementDislike(int feed_id) {
+		String query = "UPDATE chen869.feed SET dislikes = dislikes + 1 WHERE feed_id = "
+				+ feed_id;
+		try {
+			Statement st = connection.createStatement();
+			st.executeUpdate(query);
+			st.close();
+		} catch (SQLException e) {
+			System.out.println("Something is wrong");
+			e.printStackTrace();
+			return false;
+		}
+		return true;
 	}
 }

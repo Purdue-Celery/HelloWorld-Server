@@ -6,10 +6,9 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.sql.Date;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Map;
 import java.util.Scanner;
+
+import org.json.simple.*;
 
 import com.team13purdue.helloworld.database.DatabaseServer;
 
@@ -78,15 +77,57 @@ class ClientWorker implements Runnable {
 				else
 					out.println("fail");
 			}
-		} else if (str.startsWith("@addfeed")) {
-			out.println("addfeed request receieved");
-			// myDBServer.addFeed("aaa", "heng", Date.valueOf("2013-04-02"),
-			// 0,0,0,0);
-		} else if (str.startsWith("@getfeed")) {
+		} else if (str.startsWith("@add_feed")) {
+			// out.println("addfeed request receieved");
+			str.replaceFirst("@add_feed ", "");
+			Object obj = JSONValue.parse(str);
+			JSONObject obj2 = (JSONObject) obj;
+			String username = (String) obj2.get("username");
+			String content = (String) obj2.get("content");
+			Date date = (Date) obj2.get("date");
+			double latitude = (Double) obj2.get("latitude");
+			double longitude = (Double) obj2.get("longitude");
+			int likes = (Integer) obj2.get("likes");
+			int dislikes = (Integer) obj2.get("dislikes");
+			System.out.println(username + "\n" + content + "\n" + date + "\n"
+					+ latitude + "\n" + longitude + "\n" + likes + "\n"
+					+ dislikes);
+
+			int feed_id = 0;
+			// feed_id = myDBServer.addFeed(username, content, date, latitude,
+			// longitude, likes, dislikes);
+			out.println(feed_id);
+		} else if (str.startsWith("@get_feed")) {
 			out.println("getfeed request receieved");
-		} else if (str.startsWith("@addreply")) {
+
+		} else if (str.startsWith("@add_reply")) {
 			out.println("addreply request receieved");
+
 			// myDBServer.addReply(1, "aaa", Date.valueOf("2013-04-02"));
+		} else if (str.startsWith("@get_reply_list")) {
+			
+			
+			
+			out.println("");
+
+		} else if (str.startsWith("@")) {
+			out.println("");
+
+		} else if (str.startsWith("@")) {
+			out.println("");
+
+		} else if (str.startsWith("@")) {
+			out.println("");
+
+		} else if (str.startsWith("@")) {
+			out.println("");
+
+		} else if (str.startsWith("@")) {
+			out.println("");
+
+		} else if (str.startsWith("@")) {
+			out.println("");
+
 		} else if (str.equals("@done")) {
 			out.println("closed");
 		} else {

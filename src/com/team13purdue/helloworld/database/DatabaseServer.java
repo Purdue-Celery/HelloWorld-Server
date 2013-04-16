@@ -6,8 +6,10 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 import com.team13purdue.helloworld.model.Feed;
+import com.team13purdue.helloworld.model.Reply;
 
 public class DatabaseServer {
 
@@ -96,7 +98,7 @@ public class DatabaseServer {
 		}
 	}
 
-	public void addFeed(String username, String content, Date date,
+	public int addFeed(String username, String content, Date date,
 			double latitude, double longitude, int likes, int dislikes) {
 		// addFeed("aaa", "heng", Date.valueOf("2013-04-02"), 0,0,0,0)
 		String query = "INSERT INTO chen869.feed (username, content, date, latitude, longitude, likes, dislikes) VALUES ('"
@@ -123,6 +125,28 @@ public class DatabaseServer {
 			System.out.println("Something is wrong");
 			e.printStackTrace();
 		}
+		int feed_id = 0;
+
+		// TODO
+		query = "SELECT feed_id FROM chen869.feed WHERE username = '"
+				+ username + "' AND content = '" + content + "' AND date = "
+				+ date.toString();
+		System.out.println(query);
+		try {
+			Statement st = connection.createStatement();
+			ResultSet rs = st.executeQuery(query);
+			while (rs.next()) {
+				feed_id = rs.getInt("feed_id");
+			}
+			st.close();
+		} catch (SQLException e) {
+			System.out.println("Something is wrong");
+			e.printStackTrace();
+		}
+		System.out.println("feed_id: " + feed_id);
+
+		return feed_id;
+
 	}
 
 	public void addReply(int feed_id, String username, Date date) {
@@ -139,15 +163,14 @@ public class DatabaseServer {
 		}
 	}
 
-	public String getFeed(int feedID) {
-		String query1 = "SELECT * FROM chen869.feed WHERE feed_id=";
-		String query = query1 + feedID;
+	public String getFeed(int feed_id) {
+		String query = "SELECT * FROM chen869.feed WHERE feed_id=" + feed_id;
 		System.out.println(query);
 		try {
 			Statement st = connection.createStatement();
 			ResultSet rs = st.executeQuery(query);
 			while (rs.next()) {
-				int feed_id = rs.getInt("feed_id");
+				// feed_id = rs.getInt("feed_id");
 				String username = rs.getString("username");
 				String content = rs.getString("content");
 				Date date = rs.getDate("date");
@@ -158,6 +181,21 @@ public class DatabaseServer {
 				Feed feed = new Feed(feed_id, username, content, date,
 						latitude, longitude, likes, dislikes);
 				return feed.toString();
+			}
+		} catch (SQLException e) {
+			System.out.println("getFeed has gone wrong");
+			return null;
+		}
+		return null;
+	}
+
+	public ArrayList<Reply> getReplyList(int feed_id) {
+		String query = "SELECT * FROM chen869.reply WHERE feed_id = "+feed_id;
+		try {
+			Statement st = connection.createStatement();
+			ResultSet rs = st.executeQuery(query);
+			while (rs.next()) {
+				
 			}
 		} catch (SQLException e) {
 			System.out.println("getFeed has gone wrong");

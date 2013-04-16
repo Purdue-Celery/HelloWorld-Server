@@ -8,6 +8,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import org.json.JSONArray;
+
 import com.team13purdue.helloworld.model.Feed;
 import com.team13purdue.helloworld.model.Reply;
 
@@ -125,12 +127,11 @@ public class DatabaseServer {
 			System.out.println("Something is wrong");
 			e.printStackTrace();
 		}
-		int feed_id = 0;
 
-		// TODO
+		int feed_id = 0;
 		query = "SELECT feed_id FROM chen869.feed WHERE username = '"
-				+ username + "' AND content = '" + content + "' AND date = "
-				+ date.toString();
+				+ username + "' AND content = '" + content + "' AND date = '"
+				+ date.toString() + "'";
 		System.out.println(query);
 		try {
 			Statement st = connection.createStatement();
@@ -143,7 +144,6 @@ public class DatabaseServer {
 			System.out.println("Something is wrong");
 			e.printStackTrace();
 		}
-		System.out.println("feed_id: " + feed_id);
 
 		return feed_id;
 
@@ -189,13 +189,15 @@ public class DatabaseServer {
 		return null;
 	}
 
-	public ArrayList<Reply> getReplyList(int feed_id) {
-		String query = "SELECT * FROM chen869.reply WHERE feed_id = "+feed_id;
+	public String getReplyList(int feed_id) {
+		JSONArray array = new JSONArray();
+
+		String query = "SELECT * FROM chen869.reply WHERE feed_id = " + feed_id;
 		try {
 			Statement st = connection.createStatement();
 			ResultSet rs = st.executeQuery(query);
 			while (rs.next()) {
-				
+
 			}
 		} catch (SQLException e) {
 			System.out.println("getFeed has gone wrong");

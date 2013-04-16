@@ -2,7 +2,7 @@ package com.team13purdue.helloworld.model;
 
 import java.util.Date;
 
-import org.json.simple.JSONObject;
+import org.json.*;
 
 public class Feed {
 	public int feed_id;
@@ -16,8 +16,8 @@ public class Feed {
 
 	// public Location loc;
 
-	public Feed(int feed_id, String username, String content, Date date, double latitude,
-			double longitude, int likes, int dislikes) {
+	public Feed(int feed_id, String username, String content, Date date,
+			double latitude, double longitude, int likes, int dislikes) {
 		this.feed_id = feed_id;
 		this.username = username;
 		this.content = content;
@@ -30,7 +30,8 @@ public class Feed {
 
 	public String toString() {
 		JSONObject obj = new JSONObject();
-		
+
+		try {
 			obj.put("ID", this.feed_id);
 			obj.put("username", this.username);
 			obj.put("content", this.content);
@@ -43,8 +44,11 @@ public class Feed {
 			obj.put("longitude", 0.0);
 			obj.put("likes", this.likes);
 			obj.put("dislikes", this.dislikes);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
-		
 		return obj.toString();
 	}
 

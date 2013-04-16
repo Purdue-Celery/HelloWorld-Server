@@ -1,8 +1,8 @@
 package com.team13purdue.helloworld.model;
 
-import java.util.Date;
+import java.sql.Date;
 
-import org.json.simple.JSONObject;
+import org.json.*;
 
 public class Reply {
 	public int reply_id;
@@ -21,12 +21,17 @@ public class Reply {
 
 	public String toString() {
 		JSONObject obj = new JSONObject();
-		
+
+		try {
 			obj.put("ID", this.reply_id);
 			obj.put("username", this.username);
 			obj.put("content", this.content);
 			obj.put("date", this.date.toString());
-		
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 		return obj.toString();
 	}
 

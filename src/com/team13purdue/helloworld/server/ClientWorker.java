@@ -8,7 +8,7 @@ import java.net.Socket;
 import java.sql.Date;
 import java.util.Scanner;
 
-import org.json.simple.*;
+import org.json.*;
 
 import com.team13purdue.helloworld.database.DatabaseServer;
 
@@ -79,23 +79,43 @@ class ClientWorker implements Runnable {
 			}
 		} else if (str.startsWith("@add_feed")) {
 			// out.println("addfeed request receieved");
-			str.replaceFirst("@add_feed ", "");
-			Object obj = JSONValue.parse(str);
-			JSONObject obj2 = (JSONObject) obj;
-			String username = (String) obj2.get("username");
-			String content = (String) obj2.get("content");
-			Date date = (Date) obj2.get("date");
-			double latitude = (Double) obj2.get("latitude");
-			double longitude = (Double) obj2.get("longitude");
-			int likes = (Integer) obj2.get("likes");
-			int dislikes = (Integer) obj2.get("dislikes");
-			System.out.println(username + "\n" + content + "\n" + date + "\n"
-					+ latitude + "\n" + longitude + "\n" + likes + "\n"
-					+ dislikes);
-
+			System.out.println("****inside");
+			str = str.replaceFirst("@add_feed ", "");
+			System.out.println("str: " + str);
+			// Object obj = JSONValue.parse(str);
+			JSONObject obj2 = null;
+			try {
+				obj2 = new JSONObject(str);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			int feed_id = 0;
-			// feed_id = myDBServer.addFeed(username, content, date, latitude,
-			// longitude, likes, dislikes);
+			try {
+				String username = obj2.getString("username");
+				System.out.println("name: " + username);
+				String content = obj2.getString("content");
+				System.out.println("content: " + content);
+
+				double latitude = obj2.getDouble("latitude");
+				System.out.println("latitude: " + latitude);
+				double longitude = obj2.getDouble("longitude");
+				System.out.println("longitude: " + longitude);
+				int likes = obj2.getInt("likes");
+				int dislikes = obj2.getInt("dislikes");
+				Date date = Date.valueOf((String) obj2.get("date"));
+				System.out.println("date: " + date.toString());
+				System.out.println(username + "\n" + content + "\n" + date
+						+ "\n" + 0 + "\n" + 0 + "\n" + 0 + "\n" + 0);
+
+				feed_id = myDBServer.addFeed(username, content, date, latitude, longitude, likes,
+						dislikes);
+				System.out.println("feed_id:"+feed_id);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 			out.println(feed_id);
 		} else if (str.startsWith("@get_feed")) {
 			out.println("getfeed request receieved");
@@ -105,9 +125,7 @@ class ClientWorker implements Runnable {
 
 			// myDBServer.addReply(1, "aaa", Date.valueOf("2013-04-02"));
 		} else if (str.startsWith("@get_reply_list")) {
-			
-			
-			
+
 			out.println("");
 
 		} else if (str.startsWith("@")) {

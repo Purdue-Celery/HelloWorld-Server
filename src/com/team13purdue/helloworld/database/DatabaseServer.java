@@ -149,7 +149,7 @@ public class DatabaseServer {
 				int dislikes = rs.getInt("dislikes");
 				JSONObject obj = new JSONObject();
 				try {
-					obj.put("feedID", feed_id);
+					obj.put("ID", feed_id);
 					obj.put("username", username);
 					obj.put("content", content);
 					obj.put("date", date.toString());

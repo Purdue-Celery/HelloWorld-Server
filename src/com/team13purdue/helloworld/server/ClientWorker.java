@@ -80,6 +80,7 @@ class ClientWorker implements Runnable {
 			// TODO deal with filter object
 
 			String list = myDBServer.getUpdatedFeedList(0, 0);
+			System.out.println(list);
 			out.println(list);
 
 		} else if (str.startsWith("@add_feed")) {

@@ -47,6 +47,7 @@ class ClientWorker implements Runnable {
 				}
 			} finally {
 				client.close();
+				System.out.println("Closing client");
 			}
 		} catch (IOException e) {
 			System.out.println("in or out failed");

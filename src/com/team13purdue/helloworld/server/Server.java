@@ -11,7 +11,7 @@ import com.team13purdue.helloworld.database.DatabaseServer;
 public class Server {
 	
 	private static final int PORT_NUMBER = 1253;
-	private static final int THREADPOOL_SIZE = 100;
+	private static final int THREADPOOL_SIZE = 25;
 	
 	private ExecutorService mExecutor;
 	

@@ -12,6 +12,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.team13purdue.helloworld.server.Utility;
+
 public class DatabaseServer {
 
 	// set up parameters:
@@ -131,7 +133,8 @@ public class DatabaseServer {
 		}
 	}
 
-	public String getUpdatedFeedList(double target_latitude, double target_longitude) {
+	public String getUpdatedFeedList(double target_latitude,
+			double target_longitude, int range) {
 		JSONArray array = new JSONArray();
 		// TODO need to change
 		String query = "SELECT * FROM chen869.feed";
@@ -140,29 +143,36 @@ public class DatabaseServer {
 			ResultSet rs = st.executeQuery(query);
 			while (rs.next()) {
 				int feed_id = rs.getInt("feed_id");
-				String username = rs.getString("username");
-				String content = rs.getString("content");
-				Date date = rs.getDate("date");
 				double latitude = rs.getDouble("latitude");
 				double longitude = rs.getDouble("longitude");
-				int likes = rs.getInt("likes");
-				int dislikes = rs.getInt("dislikes");
-				JSONObject obj = new JSONObject();
-				try {
-					obj.put("ID", feed_id);
-					obj.put("username", username);
-					obj.put("content", content);
-					obj.put("date", date.toString());
-					obj.put("latitude", latitude);
-					obj.put("longitude", longitude);
-					obj.put("likes", likes);
-					obj.put("dislikes", dislikes);
+				float[] results = new float[1];
+				Utility.computeDistanceAndBearing(target_latitude,
+						target_longitude, latitude, longitude, results);
+				System.out.println("feed_id: " + feed_id + "  distance: "
+						+ results[0] + "  range: " + range);
+				if (results[0] < range) {
 
-				} catch (JSONException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					String username = rs.getString("username");
+					String content = rs.getString("content");
+					Date date = rs.getDate("date");
+					int likes = rs.getInt("likes");
+					int dislikes = rs.getInt("dislikes");
+					JSONObject obj = new JSONObject();
+					try {
+						obj.put("ID", feed_id);
+						obj.put("username", username);
+						obj.put("content", content);
+						obj.put("date", date.toString());
+						obj.put("latitude", latitude);
+						obj.put("longitude", longitude);
+						obj.put("likes", likes);
+						obj.put("dislikes", dislikes);
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					array.put(obj);
 				}
-				array.put(obj);
 			}
 		} catch (SQLException e) {
 			System.out.println("Something is wrong");

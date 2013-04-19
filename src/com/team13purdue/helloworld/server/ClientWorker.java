@@ -47,6 +47,7 @@ class ClientWorker implements Runnable {
 				}
 			} finally {
 				client.close();
+				System.out.println("Closing client");
 			}
 		} catch (IOException e) {
 			System.out.println("in or out failed");
@@ -78,8 +79,20 @@ class ClientWorker implements Runnable {
 			}
 		} else if (str.startsWith("@update_current_feeds")) {
 			// TODO deal with filter object
-
-			String list = myDBServer.getUpdatedFeedList(0, 0);
+			str = str.replaceFirst("@update_current_feeds ", "");
+			String list = null;
+			JSONObject obj = null;
+			try {
+				obj = new JSONObject(str);
+				double latitude = obj.getDouble("latitude");
+				double longitude = obj.getDouble("longitude");
+				int range = obj.getInt("range");
+				//list = myDBServer.getUpdatedFeedList(latitude, longitude, range);
+				list = myDBServer.getUpdatedFeedList(0, 0, range);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			System.out.println(list);
 			out.println(list);
 
@@ -114,6 +127,8 @@ class ClientWorker implements Runnable {
 
 		} else if (str.startsWith("@add_reply")) {
 			str = str.replaceFirst("@add_reply ", "");
+			int indexOfSpace = str.indexOf(" ");
+			str = str.substring(indexOfSpace+1);
 			System.out.println("str: " + str);
 			JSONObject obj = null;
 			try {

@@ -97,7 +97,7 @@ public class DatabaseServer {
 			st.executeUpdate(query);
 			return true;
 		} catch (SQLException e) {
-			System.out.println("Something is wrong");
+			System.out.println("insertUser is wrong");
 			return false;
 		}
 		// System.out.println(query);
@@ -128,7 +128,7 @@ public class DatabaseServer {
 			}
 
 		} catch (SQLException e) {
-			System.out.println("Something is wrong");
+			System.out.println("verifyLogin is wrong");
 			return false;
 		}
 	}
@@ -175,7 +175,7 @@ public class DatabaseServer {
 				}
 			}
 		} catch (SQLException e) {
-			System.out.println("Something is wrong");
+			System.out.println("getUpdatedFeedList is wrong");
 			return null;
 		}
 		return array.toString();
@@ -205,7 +205,7 @@ public class DatabaseServer {
 			st.executeUpdate(query);
 			st.close();
 		} catch (SQLException e) {
-			System.out.println("Something is wrong");
+			System.out.println("addFeed is wrong");
 			e.printStackTrace();
 		}
 
@@ -222,7 +222,7 @@ public class DatabaseServer {
 			}
 			st.close();
 		} catch (SQLException e) {
-			System.out.println("Something is wrong");
+			System.out.println("addFeed is wrong");
 			e.printStackTrace();
 		}
 
@@ -247,7 +247,7 @@ public class DatabaseServer {
 			st.executeUpdate(query);
 			st.close();
 		} catch (SQLException e) {
-			System.out.println("Something is wrong");
+			System.out.println("addReply is wrong");
 			e.printStackTrace();
 			return false;
 		}
@@ -275,7 +275,7 @@ public class DatabaseServer {
 
 			}
 		} catch (SQLException e) {
-			System.out.println("Something is wrong");
+			System.out.println("getFeed is wrong");
 			return null;
 		}
 		return null;
@@ -309,7 +309,7 @@ public class DatabaseServer {
 				array.put(obj);
 			}
 		} catch (SQLException e) {
-			System.out.println("Something is wrong");
+			System.out.println("getReplyList is wrong");
 			return null;
 		}
 		return array.toString();
@@ -323,7 +323,7 @@ public class DatabaseServer {
 			st.executeUpdate(query);
 			st.close();
 		} catch (SQLException e) {
-			System.out.println("Something is wrong");
+			System.out.println("incrementLike is wrong");
 			e.printStackTrace();
 			return false;
 		}
@@ -338,7 +338,7 @@ public class DatabaseServer {
 			st.executeUpdate(query);
 			st.close();
 		} catch (SQLException e) {
-			System.out.println("Something is wrong");
+			System.out.println("incrementDislike is wrong");
 			e.printStackTrace();
 			return false;
 		}

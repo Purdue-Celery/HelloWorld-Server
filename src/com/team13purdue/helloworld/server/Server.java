@@ -31,7 +31,7 @@ public class Server {
 			System.out.println("IP:" + InetAddress.getLocalHost().getHostAddress());
 			System.out.println("PORT:" + server.getLocalPort());
 		} catch (IOException e) {
-			System.err.println("Could not listen on port 4444");
+			System.err.println("Could not listen on port "+PORT_NUMBER);
 			System.exit(-1);
 		}
 		

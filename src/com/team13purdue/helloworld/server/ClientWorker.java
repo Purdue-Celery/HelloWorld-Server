@@ -39,6 +39,8 @@ class ClientWorker implements Runnable {
 				boolean done = false;
 				while (!done && in.hasNextLine()) {
 					line = in.nextLine();
+					System.out.println("======");
+					System.out.println("DATE: "+new java.util.Date());
 					System.out.println(line);
 					processString(line);
 					// out.println("@end");
@@ -65,7 +67,8 @@ class ClientWorker implements Runnable {
 				String password = register[2];
 				myDBServer.insertUser(username, password);
 				out.println("success");
-			}
+			} else
+				out.println("fail");
 		} else if (str.startsWith("@login")) {
 			String[] login = str.split(" ");
 
@@ -76,7 +79,8 @@ class ClientWorker implements Runnable {
 					out.println("success");
 				else
 					out.println("fail");
-			}
+			} else
+				out.println("fail");
 		} else if (str.startsWith("@update_current_feeds")) {
 			// TODO deal with filter object
 			str = str.replaceFirst("@update_current_feeds ", "");
@@ -87,7 +91,8 @@ class ClientWorker implements Runnable {
 				double latitude = obj.getDouble("latitude");
 				double longitude = obj.getDouble("longitude");
 				int range = obj.getInt("range");
-				//list = myDBServer.getUpdatedFeedList(latitude, longitude, range);
+				// list = myDBServer.getUpdatedFeedList(latitude, longitude,
+				// range);
 				list = myDBServer.getUpdatedFeedList(0, 0, range);
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
@@ -128,7 +133,7 @@ class ClientWorker implements Runnable {
 		} else if (str.startsWith("@add_reply")) {
 			str = str.replaceFirst("@add_reply ", "");
 			int indexOfSpace = str.indexOf(" ");
-			str = str.substring(indexOfSpace+1);
+			str = str.substring(indexOfSpace + 1);
 			System.out.println("str: " + str);
 			JSONObject obj = null;
 			try {

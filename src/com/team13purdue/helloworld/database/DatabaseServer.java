@@ -134,10 +134,10 @@ public class DatabaseServer {
 	}
 
 	public String getUpdatedFeedList(double target_latitude,
-			double target_longitude, int range) {
+			double target_longitude, int range, int target_likes) {
 		JSONArray array = new JSONArray();
 		// TODO need to change
-		String query = "SELECT * FROM chen869.feed";
+		String query = "SELECT * FROM chen869.feed WHERE likes >= "+target_likes;
 		try {
 			Statement st = connection.createStatement();
 			ResultSet rs = st.executeQuery(query);

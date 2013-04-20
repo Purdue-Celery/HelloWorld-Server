@@ -91,9 +91,10 @@ class ClientWorker implements Runnable {
 				double latitude = obj.getDouble("latitude");
 				double longitude = obj.getDouble("longitude");
 				int range = obj.getInt("range");
+				int likes = obj.getInt("likes");
 				// list = myDBServer.getUpdatedFeedList(latitude, longitude,
 				// range);
-				list = myDBServer.getUpdatedFeedList(0, 0, range);
+				list = myDBServer.getUpdatedFeedList(0, 0, range, likes);
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

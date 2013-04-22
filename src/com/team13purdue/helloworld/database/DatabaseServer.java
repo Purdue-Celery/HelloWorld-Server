@@ -91,7 +91,7 @@ public class DatabaseServer {
 
 	public boolean insertUser(String username, String password) {
 		String query = "INSERT INTO chen869.user (username, password) VALUES ('"
-				+ username + "','" + pw + "')";
+				+ username + "','" + password + "')";
 		try {
 			Statement st = connection.createStatement();
 			st.executeUpdate(query);
